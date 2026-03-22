@@ -89,12 +89,12 @@ o Record send timestamp with microsecond precision
 o Send to server
 o Wait for reply with timeout
 o If reply received:
-▪ Calculate RTT = receive_time - send_time
-▪ Validate echo matches sent payload
-▪ Print success message with RTT
+    ▪ Calculate RTT = receive_time - send_time
+    ▪ Validate echo matches sent payload
+    ▪ Print success message with RTT
 o If timeout:
-▪ Print timeout message
-▪ Count as lost packet
+    ▪ Print timeout message
+    ▪ Count as lost packet
 3. Statistics Display:
 o Total packets sent
 o Total packets received
