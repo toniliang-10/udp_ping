@@ -11,19 +11,52 @@ def validate_arguments():
     # If incorrect, print usage message and exit
     if len(sys.argv) != 6:
         # TODO: Print detailed usage message
-        
+        print("Usage: python udp_client.py <server_host> <server_port> <N> <interval> <timeout>")
+        print("Example: python udp_client.py 127.0.0.1 9999 10 0.5 1.0")
         sys.exit(1)
     
     server_host = sys.argv[1]
+
     # TODO: Validate server_port (integer between 1-65535)
     try:
-        server_port = int(sys.argv[2])    
-    # TODO: Validate N (integer >= 1)    
+        server_port = int(sys.argv[2])
+        if not (1 <= server_port <= 65535):
+            print(f"Error: server_port must be between 1 and 65535, got {server_port}")
+            sys.exit(1)
+    except ValueError:
+        print(f"Error: server_port must be an integer, got '{sys.argv[2]}'")
+        sys.exit(1)
+
+    # TODO: Validate N (integer >= 1)
+    try:
+        N = int(sys.argv[3])
+        if N < 1:
+            print(f"Error: N must be >= 1, got {N}")
+            sys.exit(1)
+    except ValueError:
+        print(f"Error: N must be an integer, got '{sys.argv[3]}'")
+        sys.exit(1)
+
     # TODO: Validate interval (float > 0)
     try:
-    
+        interval = float(sys.argv[4])
+        if interval <= 0:
+            print(f"Error: interval must be > 0, got {interval}")
+            sys.exit(1)
+    except ValueError:
+        print(f"Error: interval must be a number, got '{sys.argv[4]}'")
+        sys.exit(1)
+
     # TODO: Validate timeout (float > 0)
     try:
+        timeout = float(sys.argv[5])
+        if timeout <= 0:
+            print(f"Error: timeout must be > 0, got {timeout}")
+            sys.exit(1)
+    except ValueError:
+        print(f"Error: timeout must be a number, got '{sys.argv[5]}'")
+        sys.exit(1)
+
     return server_host, server_port, N, interval, timeout
 
 def create_ping_message(seq_num):
@@ -38,7 +71,11 @@ def create_ping_message(seq_num):
 
 def main():
     """Main client function - sends pings and collects statistics."""
-    # Parse and validate arguments    
+    # Parse and validate arguments
+    server_host, server_port, N, interval, timeout = validate_arguments()
+    print(f"PING {server_host}:{server_port}")
+    print(f"Sending {N} ping messages with {interval}s interval, {timeout}s timeout...")
+
     # Statistics tracking
     packets_sent = 0
     packets_received = 0
