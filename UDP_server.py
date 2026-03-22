@@ -11,6 +11,8 @@ def main():
     # Example: python udp_server.py 127.0.0.1 9999
     if len(sys.argv) != 3:
         # TODO: Print usage message and exit with error code 1
+        print("Usage: python udp_server.py <host> <port>")
+        print("Example: python udp_server.py 127.0.0.1 9999")
         sys.exit(1)
 
     
