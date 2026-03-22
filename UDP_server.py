@@ -18,7 +18,7 @@ def main():
     
     host = sys.argv[1]
     
-    # TODO: Validate and convert port number (5 points)
+    # Validate and convert port number (5 points)
     # - Convert port from string to integer
     # - Check if port is between 1 and 65535
     # - Print error message for invalid port
@@ -37,36 +37,36 @@ def main():
         sys.exit(1)
 
     
-    # TODO: Create UDP socket (5 points)
+    # Create UDP socket (5 points)
     # - Use socket.AF_INET for IPv4
     # - Use socket.SOCK_DGRAM for UDP
     # - Handle socket creation errors
     try:
-        server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # TODO: Create UDP socket here
+        server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # Create UDP socket here
     except socket.error as e:
-        # TODO: Print error message and exit
+        # Print error message and exit
         print(f"Error: Could not create socket: {e}")
         sys.exit(1)
 
     
-    # TODO: Bind socket to host:port (5 points)
+    # Bind socket to host:port (5 points)
     # - Bind the socket to the specified host and port
     # - Print error message if bind fails
     # - Print success message when bound
     try:
-        # TODO: Bind socket here
+        # Bind socket here
         server_socket.bind((host, port))
-        # TODO: Print listening message
+        # Print listening message
         print(f"UDP Echo Server listening on {host}:{port}")
         print("Press Ctrl+C to stop the server")
     except socket.error as e:
-        # TODO: Print error, close socket, and exit
+        # Print error, close socket, and exit
         print(f"Error: Could not bind to {host}:{port}: {e}")
         server_socket.close()
         sys.exit(1)
 
     
-    # TODO: Main echo loop 
+    # Main echo loop 
     # - Create infinite loop to handle datagrams
     # - Use recvfrom() to receive data and client address
     # - Use sendto() to echo exact data back to client
@@ -74,23 +74,23 @@ def main():
     try:
         while True:
             try:
-                # TODO: Receive datagram (max 4096 bytes recommended)
+                # Receive datagram (max 4096 bytes recommended)
                 data, client_address = server_socket.recvfrom(4096)
-                # TODO: Print received message info
+                # Print received message info
 
-                # TODO: Echo exact data back to sender
+                # Echo exact data back to sender
                 server_socket.sendto(data, client_address)
-                # TODO: Optional - Print echo confirmation
+                # Optional - Print echo confirmation
                 print(f"Echoed {len(data)} bytes to {client_address}")
             except socket.error as e:
-                # TODO: Handle socket errors within the loop
+                # Handle socket errors within the loop
                 print(f"Error: {e}")
                 continue
                 
     except KeyboardInterrupt:
         print("\nServer stopped by user")
     finally:
-        # TODO: Close socket before exiting
+        # Close socket before exiting
         server_socket.close()
         print("Socket closed")
 
