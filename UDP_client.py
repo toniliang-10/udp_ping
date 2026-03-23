@@ -141,7 +141,21 @@ def main():
     # TODO : Calculate and display statistics (10 points)    
     # TODO: Print packets transmitted and received    
     # TODO: Calculate and print packet loss percentage    
+    loss_pct = ((packets_sent - packets_received) / packets_sent * 100) if packets_sent > 0 else 0.0
+    print("--- Ping Statistics ---")
+    print(f"{packets_sent} packets transmitted, {packets_received} packets received, {loss_pct:.1f}% packet loss")
+
     # TODO: Calculate and print RTT statistics (if any successful pings)        
         # TODO: Calculate min, avg, max RTT
+    if rtt_times:       #if there are RTTs from sent to received 
+        min_rtt = min(rtt_times) * 1000
+        avg_rtt = (sum(rtt_times) / len(rtt_times)) * 1000
+        max_rtt = max(rtt_times) * 1000
+        print("Round-trip times (ms):")
+        print(f"Minimum = {min_rtt:.3f} ms")
+        print(f"Average = {avg_rtt:.3f} ms")
+        print(f"Maximum = {max_rtt:.3f} ms")
 if __name__ == "__main__":
     main()
+
+
