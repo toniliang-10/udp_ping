@@ -100,26 +100,44 @@ def main():
         # TODO: Sleep between pings (except before first one)
         if seq_num > 1:
             # TODO: Sleep for 'interval' seconds
-            pass
+            time.sleep(interval)
         
         # TODO: Create ping message        
+        ping_message = create_ping_message(seq_num)
         # TODO: Record send time (use time.perf_counter() for precision)        
+        send_time = time.perf_counter()
         try:
             # TODO: Send ping message to server
-            
+            client_socket.sendto(ping_message, (server_host, server_port))
+            packets_sent += 1
+
             # TODO: Try to receive response with timeout
             try:
                 # TODO: Receive response (max 4096 bytes recommended)
+                response, addr = client_socket.recvfrom(4096)
                 # TODO: Calculate RTT
+                recv_time = time.perf_counter()
+                rtt = recv_time - send_time
                 # TODO: Verify response (optional but good practice)
                 # - Check if response matches what we sent
                 # - You can compare response == ping_message
                 # - Or extract sequence number from response
+                if response != ping_message:
+                    print(f"PING #{seq_num}: Warning - response mismatch")
                 # TODO: Update statistics                
+                packets_received += 1
+                rtt_times.append(rtt)
                 # TODO: Print success message with RTT in millisecond   
-               # TODO: Handle timeout - print timeout message
-                # TODO: Handle other socket error
+                print(f"PING #{seq_num}: Reply from {server_host}:{server_port}, RTT={rtt * 1000:.3f} ms")
+            except socket.timeout:
+                # TODO: Handle timeout - print timeout message
+                print(f"PING #{seq_num}: Request timed out")
+        except socket.error as e:
+            # TODO: Handle other socket error
+            print(f"PING #{seq_num}: Socket error: {e}")
+
     # TODO: Close socket
+    client_socket.close()
     # TODO : Calculate and display statistics (10 points)    
     # TODO: Print packets transmitted and received    
     # TODO: Calculate and print packet loss percentage    
