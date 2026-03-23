@@ -3,21 +3,21 @@ import socket
 import time
 
 def validate_arguments():
-    """TODO: Parse and validate command-line arguments (15 points)"""
+    """Parse and validate command-line arguments (15 points)"""
     # The client should accept exactly 5 arguments:
     # python udp_client.py <server_host> <server_port> <N> <interval> <timeout>
     
-    # TODO: Check for exactly 6 arguments (script name + 5 parameters)
+    # Check for exactly 6 arguments (script name + 5 parameters)
     # If incorrect, print usage message and exit
     if len(sys.argv) != 6:
-        # TODO: Print detailed usage message
+        # Print detailed usage message
         print("Usage: python udp_client.py <server_host> <server_port> <N> <interval> <timeout>")
         print("Example: python udp_client.py 127.0.0.1 9999 10 0.5 1.0")
         sys.exit(1)
     
     server_host = sys.argv[1]
 
-    # TODO: Validate server_port (integer between 1-65535)
+    # Validate server_port (integer between 1-65535)
     try:
         server_port = int(sys.argv[2])
         if not (1 <= server_port <= 65535):
@@ -27,7 +27,7 @@ def validate_arguments():
         print(f"Error: server_port must be an integer, got '{sys.argv[2]}'")
         sys.exit(1)
 
-    # TODO: Validate N (integer >= 1)
+    # Validate N (integer >= 1)
     try:
         N = int(sys.argv[3])
         if N < 1:
@@ -37,7 +37,7 @@ def validate_arguments():
         print(f"Error: N must be an integer, got '{sys.argv[3]}'")
         sys.exit(1)
 
-    # TODO: Validate interval (float > 0)
+    # Validate interval (float > 0)
     try:
         interval = float(sys.argv[4])
         if interval <= 0:
@@ -47,7 +47,7 @@ def validate_arguments():
         print(f"Error: interval must be a number, got '{sys.argv[4]}'")
         sys.exit(1)
 
-    # TODO: Validate timeout (float > 0)
+    # Validate timeout (float > 0)
     try:
         timeout = float(sys.argv[5])
         if timeout <= 0:
@@ -60,16 +60,16 @@ def validate_arguments():
     return server_host, server_port, N, interval, timeout
 
 def create_ping_message(seq_num):
-    """TODO: Create ping message (10 points)"""
+    """Create ping message (10 points)"""
     # Construct a ping message with sequence number and timestamp
     # Format: "PING <sequence_number> <timestamp>"
     # Example: "PING 1 1681234567.891234"
     
-    # TODO: Get current time with microsecond precision    
+    # Get current time with microsecond precision    
     timestamp = time.time()
-    # TODO: Format the message string    
+    # Format the message string    
     message = f"PING {seq_num} {timestamp}"
-    # TODO: Encode to bytes for UDP transmission    
+    # Encode to bytes for UDP transmission    
     return message.encode()
 
 def main():
@@ -84,69 +84,69 @@ def main():
     packets_received = 0
     rtt_times = []  # Store RTTs in seconds
     
-    # TODO: Create UDP socket and set timeout (10 points)
+    # Create UDP socket and set timeout (10 points)
     try:
-        # TODO: Create UDP socket (AF_INET, SOCK_DGRAM)
+        # Create UDP socket (AF_INET, SOCK_DGRAM)
         client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-        # TODO: Set socket timeout (in seconds)        
+        # Set socket timeout (in seconds)        
         client_socket.settimeout(timeout)
     except socket.error as e:
         print(f"Socket creation failed: {e}")
         sys.exit(1)
     
-    # TODO : Main ping loop 
+    # Main ping loop 
     for seq_num in range(1, N + 1):
-        # TODO: Sleep between pings (except before first one)
+        # Sleep between pings (except before first one)
         if seq_num > 1:
-            # TODO: Sleep for 'interval' seconds
+            # Sleep for 'interval' seconds
             time.sleep(interval)
         
-        # TODO: Create ping message        
+        # Create ping message        
         ping_message = create_ping_message(seq_num)
-        # TODO: Record send time (use time.perf_counter() for precision)        
+        # Record send time (use time.perf_counter() for precision)        
         send_time = time.perf_counter()
         try:
-            # TODO: Send ping message to server
+            # Send ping message to server
             client_socket.sendto(ping_message, (server_host, server_port))
             packets_sent += 1
 
-            # TODO: Try to receive response with timeout
+            # Try to receive response with timeout
             try:
-                # TODO: Receive response (max 4096 bytes recommended)
+                # Receive response (max 4096 bytes recommended)
                 response, addr = client_socket.recvfrom(4096)
-                # TODO: Calculate RTT
+                # Calculate RTT
                 recv_time = time.perf_counter()
                 rtt = recv_time - send_time
-                # TODO: Verify response (optional but good practice)
+                # Verify response (optional but good practice)
                 # - Check if response matches what we sent
                 # - You can compare response == ping_message
                 # - Or extract sequence number from response
                 if response != ping_message:
-                    print(f"PING #{seq_num}: Warning - response mismatch")
-                # TODO: Update statistics                
+                    print(f"\tWarning - (PING #{seq_num}): response mismatch ")
+                # Update statistics             
                 packets_received += 1
                 rtt_times.append(rtt)
-                # TODO: Print success message with RTT in millisecond   
+                # Print success message with RTT in millisecond   
                 print(f"PING #{seq_num}: Reply from {server_host}:{server_port}, RTT={rtt * 1000:.3f} ms")
             except socket.timeout:
-                # TODO: Handle timeout - print timeout message
+                # Handle timeout - print timeout message
                 print(f"PING #{seq_num}: Request timed out")
         except socket.error as e:
-            # TODO: Handle other socket error
+            # Handle other socket error
             print(f"PING #{seq_num}: Socket error: {e}")
 
-    # TODO: Close socket
+    # Close socket
     client_socket.close()
-    # TODO : Calculate and display statistics (10 points)    
-    # TODO: Print packets transmitted and received    
-    # TODO: Calculate and print packet loss percentage    
+    # Calculate and display statistics (10 points)    
+    # Print packets transmitted and received    
+    # Calculate and print packet loss percentage    
     loss_pct = ((packets_sent - packets_received) / packets_sent * 100) if packets_sent > 0 else 0.0
     print("--- Ping Statistics ---")
     print(f"{packets_sent} packets transmitted, {packets_received} packets received, {loss_pct:.1f}% packet loss")
 
-    # TODO: Calculate and print RTT statistics (if any successful pings)        
-        # TODO: Calculate min, avg, max RTT
+    # Calculate and print RTT statistics (if any successful pings)        
+        # Calculate min, avg, max RTT
     if rtt_times:       #if there are RTTs from sent to received 
         min_rtt = min(rtt_times) * 1000
         avg_rtt = (sum(rtt_times) / len(rtt_times)) * 1000
