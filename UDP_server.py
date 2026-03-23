@@ -58,7 +58,6 @@ def main():
         server_socket.bind((host, port))
         # Print listening message
         print(f"UDP Echo Server listening on {host}:{port}")
-        print("Press Ctrl+C to stop the server")
     except socket.error as e:
         # Print error, close socket, and exit
         print(f"Error: Could not bind to {host}:{port}: {e}")

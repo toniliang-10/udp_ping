@@ -155,6 +155,8 @@ def main():
         print(f"Minimum = {min_rtt:.3f} ms")
         print(f"Average = {avg_rtt:.3f} ms")
         print(f"Maximum = {max_rtt:.3f} ms")
+    else:
+        print("Round-trip times (ms): N/A (no replies received)")
 if __name__ == "__main__":
     main()
 

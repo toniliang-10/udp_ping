@@ -19,7 +19,7 @@ def test_basic():
     
     # Test 2: Check server starts
     print("\nStarting server...")
-    server = subprocess.Popen(['python', 'udp_server.py', '127.0.0.1', '9999'],
+    server = subprocess.Popen(['python3', 'udp_server.py', '127.0.0.1', '9999'],
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)
     time.sleep(1)
@@ -32,7 +32,7 @@ def test_basic():
     # Test 3: Quick client test
     print("\nRunning client test...")
     try:
-        client = subprocess.run(['python', 'udp_client.py', '127.0.0.1', '9999', '3', '0.2', '0.5'],
+        client = subprocess.run(['python3', 'udp_client.py', '127.0.0.1', '9999', '3', '0.2', '0.5'],
                                capture_output=True,
                                text=True,
                                timeout=3)
