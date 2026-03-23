@@ -66,8 +66,11 @@ def create_ping_message(seq_num):
     # Example: "PING 1 1681234567.891234"
     
     # TODO: Get current time with microsecond precision    
+    timestamp = time.time()
     # TODO: Format the message string    
+    message = f"PING {seq_num} {timestamp}"
     # TODO: Encode to bytes for UDP transmission    
+    return message.encode()
 
 def main():
     """Main client function - sends pings and collects statistics."""
@@ -84,8 +87,10 @@ def main():
     # TODO: Create UDP socket and set timeout (10 points)
     try:
         # TODO: Create UDP socket (AF_INET, SOCK_DGRAM)
-        
+        client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
         # TODO: Set socket timeout (in seconds)        
+        client_socket.settimeout(timeout)
     except socket.error as e:
         print(f"Socket creation failed: {e}")
         sys.exit(1)
